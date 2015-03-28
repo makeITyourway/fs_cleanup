@@ -7,16 +7,16 @@
 # path's must be on the same filesystem (separate by space) 
 	#/!\ ATTENTION /!\ - finish every dir with a trailing * - otherwise your root dir will be deleted - never use your root system !
 	#example: 	path_to_clean="/files/bla1/* /files/bla2/*"
-	path_to_clean="/files/0-9/* /files/A/*"
+	path_to_clean="/files/a/* /files/b/*"
 # mountpoint of the filesystem, where the above paths live - your root system is not a good idea !!!
 	#/!\ ATTENTION /!\ Be absolutely sure, the above paths are inside this mountpoint
 	mountpoint="/files/"
 # delte files(f) or directorys(d)   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
-	deletetype="f"
+	deletetype="d"
 # size in %, when we should start our cleaner
 	cleansize="90%"
 # maximum files to be deleted in one run (0) unlimited
-	max_files="3"
+	max_files="50"
 # RM - Options - you should not have to modify them
 	rm_opts="-fr"
 
