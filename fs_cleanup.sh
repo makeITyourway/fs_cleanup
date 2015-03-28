@@ -2,7 +2,7 @@
 
 #for i in `ls` ; do touch $i/${i}-file4 ; done
 
-# REALLY DELETE FILES OR JUST SHOW WHAT I WOULD HAVE DONE (1) do nothing (no0) delte !!!
+# REALLY DELETE FILES OR JUST SHOW WHAT I WOULD HAVE DONE (1)->do nothing (no)-> REALLY DELETE !!!
 	dry_run=1
 # path's must be on the same filesystem (separate by space) 
 	#/!\ ATTENTION /!\ - finish every dir with a trailing * - otherwise your root dir will be deleted - never use your root system !
@@ -11,11 +11,11 @@
 # mountpoint of the filesystem, where the above paths live - your root system is not a good idea !!!
 	#/!\ ATTENTION /!\ Be absolutely sure, the above paths are inside this mountpoint
 	mountpoint="/files/"
-# delte files(f) or directorys(d)   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
+# delte (f)->files or (d)->directory   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
 	deletetype="d"
 # size in %, when we should start our cleaner
 	cleansize="90%"
-# maximum files to be deleted in one run (0) unlimited
+# maximum files to be deleted in one run (0)-> unlimited
 	max_files="50"
 # RM - Options - you should not have to modify them
 	rm_opts="-fr"
