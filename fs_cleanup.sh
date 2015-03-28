@@ -2,10 +2,11 @@
 
 #for i in `ls` ; do touch $i/${i}-file4 ; done
 
-# REALLY DELETE FILES OR JUST SHOW WHAT I WOULD HAVE DONE (1) do nothing (0) delte !!!
-	dry_run=1
-# path's must be on the same filesystem (separate by space)
-	path_to_clean="/root/_projects/fs_cleanup/bla1 /root/_projects/fs_cleanup/bla2"
+# REALLY DELETE FILES OR JUST SHOW WHAT I WOULD HAVE DONE (1) do nothing (no0) delte !!!
+	dry_run=no
+# path's must be on the same filesystem (separate by space) 
+	#/!\ ATTENTION /!\ - finish every dir with a trailing * - otherwise your root dir will be deleted !
+	path_to_clean="/root/_projects/fs_cleanup/bla1/* /root/_projects/fs_cleanup/bla2/*"
 # mountpoint of the filesystem, where the above paths live
 	mountpoint="/"
 # delte files(f) or directorys(d)   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
@@ -13,7 +14,7 @@
 # size in %, when we should start our cleaner
 	cleansize="30%"
 # maximum files to be deleted in one run (0) unlimited
-	max_files="0"
+	max_files="3"
 # RM - Options - you should not have to modify them
 	rm_opts="-fr"
 
@@ -49,7 +50,8 @@
 
 
 	# set an emergency limit
-	emergency_limit=200
+	emergency_limit=1000
+
 	# get oldest files from dirs
 		debug "checking dir: $t_dir"
 		if [ $max_files -eq 0 ] ; then
@@ -63,7 +65,7 @@
 			debug "Result (latest files):\n##\n$result\n##" "\nfinished results"
 
 		# calculate num results to make a hard break	
-		num_results=`echo $result | wc -l`
+		num_results=`echo "$result" | wc -l`
 		num_results=$[$num_results+1]
 			debug "result file has $num_results lines"
 			
@@ -71,27 +73,32 @@
 
 		t_max_files=1
 		#while [ $t_used -ge $cleansize ] && [ $t_max_files -le $max_files ] && [ $t_max_files -le 2 ] && [ $t_max_files -le $num_results ]; do
-		while [ $t_used -ge $cleansize ] && [ $t_max_files -le $max_files ] && [ $t_max_files -le 5 ] && [ $t_max_files -le $num_results ] ; do
-			
-#			for t_line in $result ; do
-				t_line=`echo $result | head -n $t_max_files | tail -n 1` 
-				debug "fileline: $t_line"
+		while [ $t_used -ge $cleansize ] && [ $t_max_files -le $max_files ] && [ $t_max_files -le $emergency_limit ] && [ $t_max_files -le $num_results ] ; do
+	
+				t_line=`echo "$result" | head -n $t_max_files | tail -n 1` 
+					debug "fileline: $t_line"
+				# grep file and date from line 
 				t_2delfiledate=`echo $t_line | cut -d ";" -f 1` 	
 				t_2delfiledate=`date -d @$t_2delfiledate`
 				t_2delfilename=`echo $t_line | cut -d ";" -f 2` 	
-				if [ "$dry_run" == "delete" ] ; then
-					echo "-deleted-> $t_2delfilename ($t_2delfiledate)"
+				if [ "$dry_run" == "no" ] ; then
 					rm $rm_opts $t_2delfilename
+					action="-deleted->"
 				else
-					echo "-dry_run-> $t_2delfilename ($t_2delfiledate)"
+					action="-dry_run->"
 				fi
-				
 
-				#cout up deleted files
-				echo $t_max_files
-				t_max_files=$[$t_max_files+1]
 
 				# get new disk space
 				t_used=`df $mountpoint |  awk '{ print $5 }' | tail -n 1 | cut -d '%' -f 1`
-		done
+				debug "now having a disk_usage of $t_used"
+
+				# giving output to the user
+				echo "$action $t_2delfilename ($t_2delfiledate), now having $t_used% free space"
+				
+
+				#cout up deleted files
+				t_max_files=$[$t_max_files+1]
+
+	done
 exit 0
