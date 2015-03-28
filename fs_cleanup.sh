@@ -9,6 +9,7 @@
 	#example: 	path_to_clean="/files/bla1/* /files/bla2/*"
 	path_to_clean="/files/0-9/* /files/A/*"
 # mountpoint of the filesystem, where the above paths live - your root system is not a good idea !!!
+	#/!\ ATTENTION /!\ Be absolutely sure, the above paths are inside this mountpoint
 	mountpoint="/files/"
 # delte files(f) or directorys(d)   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
 	deletetype="f"
