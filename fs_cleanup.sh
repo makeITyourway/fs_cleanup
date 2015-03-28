@@ -7,11 +7,11 @@
 # path's must be on the same filesystem (separate by space) 
 	#/!\ ATTENTION /!\ - finish every dir with a trailing * - otherwise your root dir will be deleted - never use your root system !
 	#example: 	path_to_clean="/files/bla1/* /files/bla2/*"
-	path_to_clean="/files/bla1/* /files/bla2/*"
+	path_to_clean="/files/0-9/* /files/A/*"
 # mountpoint of the filesystem, where the above paths live - your root system is not a good idea !!!
 	mountpoint="/files/"
 # delte files(f) or directorys(d)   (keep in mind setting the max_files corrsponding to the delete_type, files might need bigger max_files than dir"
-	deletetype="d"
+	deletetype="f"
 # size in %, when we should start our cleaner
 	cleansize="90%"
 # maximum files to be deleted in one run (0) unlimited
@@ -31,16 +31,20 @@
 	mountreal=`mount | grep $mountpoint` 
 	if [ -z "$mountreal" ] ; then
 		echo "ERROR: you have entered an invalid mountpoint at ::mountpoint"
-		exit 1
+#		exit 1
 	fi
 
-	for dir in $path_to_clean ; do
-		dir=`echo $dir | cut -d "*" -f 1`
-		if [ ! -d "$dir"  ] ; then
-			echo "ERROR: you have entered an invalid dir to scan for files ::path_to_clean:: --> $dir"
-			exit 1
-		fi
-	done
+
+# removed due to error in script due to the trailing *
+#	for t_dir in $path_to_clean ; do
+#		#t_dir=`echo $t_dir | cut -d "*" -f 1`
+#		t_dir=`dirname $t_dir`	
+#		echo $t_dir
+#		if [ ! -d "$t_dir"  ] ; then
+#			echo "ERROR: you have entered an invalid dir to scan for files ::path_to_clean:: --> $dir"
+#			exit 1
+#		fi
+#	done
 	
 
    # functions
